@@ -1,0 +1,143 @@
+# Оптимизация функций
+# coding: utf-8
+
+# In[44]:
+
+
+import scipy
+import math
+import numpy as np
+import matplotlib as mpl
+import scipy.linalg
+import scipy.optimize
+
+
+# In[6]:
+
+
+def f(x) :
+    return (np.sin(x / 5.) * np.exp(x / 10.) + 5 * np.exp(-x / 2.))
+#print f(1)
+#print f(30)
+
+
+# In[27]:
+
+
+x0 = 2
+rez = scipy.optimize.minimize(f, x0, method = 'BFGS')
+c1 = str(round(rez.fun, 2))
+print c1
+
+
+# In[29]:
+
+
+x0 = 30
+rez = scipy.optimize.minimize(f, x0, method = 'BFGS')
+c2 = str(round(rez.fun, 2))
+print c2
+print rez
+
+
+# In[30]:
+
+
+file_obj = open('result1.txt', 'w')
+string = c1 + ' ' + c2
+file_obj.write(string)
+file_obj.close()
+
+
+# In[32]:
+
+
+from matplotlib import pylab as plt
+
+
+# In[33]:
+
+
+x = np.arange(1, 30, 0.1)
+#print x
+y1 = f(x)
+#y2 = w[0] + w[1] * x + w[2] * x**2 + w[3] * x**3
+plt.plot(x, y1)
+
+plt.show()
+
+
+# In[35]:
+
+
+bounds = [(1, 30)]
+result = scipy.optimize.differential_evolution(f, bounds)
+c3 = str(round(result.fun, 2))
+print c3
+print result
+
+
+# In[36]:
+
+
+file_obj = open('result2.txt', 'w')
+string = c3
+file_obj.write(string)
+file_obj.close()
+
+
+# In[58]:
+
+
+def h(x):
+    rez = np.array(f(x), int)
+    return rez
+
+
+# In[59]:
+
+
+x = np.arange(1, 30, 0.1)
+#print x
+y1 = f(x)
+y2 = h(x)
+plt.plot(x, y1, x, y2)
+
+plt.show()
+
+
+# In[47]:
+
+
+a = np.array([5.6, 3.4])
+print np.array(a, dtype = int)
+
+
+# In[61]:
+
+
+x0 = 30
+rez = scipy.optimize.minimize(h, x0, method = 'BFGS')
+c4 = str(rez.fun[0])
+print c4
+print rez
+
+
+# In[64]:
+
+
+bounds = [(1, 30)]
+result = scipy.optimize.differential_evolution(h, bounds)
+c5 = str(result.fun)
+print c5
+print result
+
+
+# In[65]:
+
+
+file_obj = open('result3.txt', 'w')
+string = c4 + ' ' + c5
+file_obj.write(string)
+file_obj.close()
+
