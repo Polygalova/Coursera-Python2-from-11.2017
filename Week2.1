@@ -1,0 +1,119 @@
+# Предложения перемножалка
+
+# coding: utf-8
+
+# In[13]:
+
+
+import re
+
+
+# In[49]:
+
+
+file_obj = open('sentences.txt', 'r')
+data_list = list(file_obj)
+list = []
+words = set()
+for line in data_list:
+    line = line.strip().lower()
+    line = re.split('[^a-z]', line)
+    line.sort()
+    while line[0] == '':
+        line.remove('')
+    for word in line:
+        words.add(word)
+    list.append(line)
+    #print line
+#print words, len(words)
+print list
+
+
+# In[31]:
+
+
+i = 0
+words_dict = {}
+for word in words:
+    words_dict[word] = i
+    i+=1
+print words_dict
+
+
+# In[87]:
+
+
+print len(list)
+print len(words)
+[key for key in words_dict.keys() if words_dict[key] == 251]
+
+
+# In[38]:
+
+
+import numpy as np
+
+
+# In[51]:
+
+
+matrix = np.zeros((len(list),len(words)))
+
+
+# In[45]:
+
+
+print data_list
+
+
+# In[100]:
+
+
+for i in range(len(list)):
+    for word in list[i]:
+        matrix[i,words_dict[word]] = list[i].count(word)
+print matrix
+matrix.shape
+
+
+# In[101]:
+
+
+import scipy.spatial
+
+
+# In[102]:
+
+
+res = {}
+list_value = []
+for i in range(1,len(list)):
+    res[i] = scipy.spatial.distance.cosine(matrix[0],matrix[i])
+    list_value.append(res[i])
+list_value.sort()
+#print res
+print list_value
+for key, value in res.items():
+    if value == list_value[0]:
+        a1 = str(key)
+        print a1
+for key, value in res.items():
+    if value == list_value[1]:
+        a2 = str(key)
+        print a2
+
+
+# In[103]:
+
+
+file_obj = open('result1.txt', 'w')
+string = a1 + ' ' + a2
+file_obj.write(string)
+file_obj.close()
+
+
+# In[98]:
+
+
+len(list_value)
+
